@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "api/evaluate.js", "use": "@vercel/node" },
+    { "src": "index.html", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/api/evaluate", "dest": "/api/evaluate.js" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
+}
