@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speak Up — Actividad CLT</title>
+<style>
+:root {
+  --purple:#534AB7; --pl:#EEEDFE; --pm:#AFA9EC; --pd:#26215C;
+  --teal:#1D9E75; --tl:#E1F5EE;
+  --amber:#BA7517; --al:#FAEEDA;
+  --coral:#C94F2C; --cl:#FAECE7;
+  --bg:#F7F6F2; --surface:#fff; --border:rgba(0,0,0,.09);
+  --text:#1a1a1a; --muted:#6b6a65;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:24px 16px 60px}
+.wrap{max-width:580px;margin:0 auto}
+.hdr{display:flex;align-items:center;gap:12px;margin-bottom:28px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.logo{width:40px;height:40px;background:var(--purple);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.hdr h1{font-size:17px;font-weight:600;letter-spacing:-.02em}
+.hdr p{font-size:11px;color:var(--muted);margin-top:1px}
+.xp-chip{margin-left:auto;background:var(--pl);color:var(--purple);font-size:13px;font-weight:600;padding:5px 13px;border-radius:20px;white-space:nowrap}
+.screen{display:none}.screen.on{display:block}
+.pill{font-size:11px;font-weight:500;padding:3px 11px;border-radius:20px;border:1px solid;display:inline-block}
+.pp{background:var(--pl);color:var(--purple);border-color:var(--pm)}
+.pt{background:var(--tl);color:var(--teal);border-color:#5DCAA5}
+.pa{background:var(--al);color:var(--amber);border-color:#FAC775}
+.intro-title{font-size:21px;font-weight:600;letter-spacing:-.03em;margin-bottom:6px}
+.intro-sub{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:20px}
+.pills-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:22px}
+.sec-lbl{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.sc{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:13px 15px;margin-bottom:9px;cursor:pointer;transition:border-color .15s,background .15s;display:flex;align-items:center;gap:13px}
+.sc:hover{border-color:var(--pm)}
+.sc.sel{border-color:var(--purple);background:var(--pl)}
+.sc.sel .st{color:var(--pd)}.sc.sel .ss{color:var(--purple)}
+.si{width:35px;height:35px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.sb{flex:1}.st{font-size:13px;font-weight:600;margin-bottom:2px}.ss{font-size:11px;color:var(--muted)}
+.chk{width:19px;height:19px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;transition:all .15s}
+.sc.sel .chk{background:var(--purple);border-color:var(--purple);color:#fff}
+.btn{width:100%;padding:12px 18px;background:var(--purple);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;margin-top:7px;transition:opacity .15s}
+.btn:hover{opacity:.9}.btn:disabled{opacity:.38;cursor:not-allowed}
+.btn-o{background:transparent;color:var(--purple);border:1.5px solid var(--purple)}
+.btn-o:hover{background:var(--pl);opacity:1}
+.pbar{height:5px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:20px}
+.pfill{height:100%;background:var(--purple);border-radius:3px;transition:width .5s ease}
+.rinfo{display:flex;justify-content:space-between;margin-bottom:18px}
+.rtag{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.xpe{font-size:13px;font-weight:500;color:var(--purple)}
+.sit-hdr{background:var(--purple);border-radius:14px 14px 0 0;padding:17px 19px}
+.sh-lbl{font-size:10px;font-weight:600;color:var(--pm);text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px}
+.sh-txt{font-size:15px;font-weight:500;color:#fff;line-height:1.55}
+.sit-body{background:var(--surface);border:1px solid var(--border);border-top:none;border-radius:0 0 14px 14px;padding:15px 19px;margin-bottom:14px}
+.hl{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:9px}
+.hint{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:5px}
+.hdot{width:5px;height:5px;border-radius:50%;background:var(--pm);margin-top:6px;flex-shrink:0}
+.rl{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px}
+textarea{width:100%;min-height:105px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;padding:11px 13px;font-family:inherit;font-size:14px;color:var(--text);line-height:1.6;resize:vertical}
+textarea:focus{outline:none;border-color:var(--purple)}
+textarea::placeholder{color:var(--muted);opacity:.65}
+.wc{font-size:11px;color:var(--muted);text-align:right;margin-top:3px}
+.fb{border-radius:8px;padding:13px 15px;margin-bottom:9px}
+.fb-sc{background:var(--pl);border-left:3px solid var(--purple)}
+.fb-ok{background:var(--tl);border-left:3px solid var(--teal)}
+.fb-sp{background:var(--cl);border-left:3px solid var(--coral)}
+.fb-tp{background:var(--al);border-left:3px solid var(--amber)}
+.fb-im{background:#F0EEFF;border-left:3px solid #7F77DD}
+.fb-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.fb-sc .fb-title{color:var(--purple)}.fb-ok .fb-title{color:var(--teal)}
+.fb-sp .fb-title{color:var(--coral)}.fb-tp .fb-title{color:var(--amber)}.fb-im .fb-title{color:#534AB7}
+.fb-body{font-size:13px;line-height:1.65}
+.fb-sc .fb-body{color:var(--pd)}.fb-ok .fb-body{color:#0F6E56}
+.fb-sp .fb-body{color:#7A2800}.fb-tp .fb-body{color:#854F0B}.fb-im .fb-body{color:var(--pd);font-style:italic}
+.score-big{font-size:34px;font-weight:500;color:var(--purple)}
+.err-row{padding:7px 10px;background:rgba(0,0,0,.04);border-radius:7px;margin-bottom:8px}
+.err-words{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:3px}
+.ew{color:var(--coral);font-weight:600;text-decoration:line-through;font-size:14px}
+.ec{color:var(--teal);font-weight:600;font-size:14px}
+.et{font-size:12px;color:var(--muted)}
+.cf-row{padding:8px 10px;background:rgba(0,0,0,.04);border-radius:7px;margin-bottom:9px}
+.loading{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;display:flex;align-items:center;gap:12px;margin-top:10px}
+.spin{width:18px;height:18px;border:2px solid var(--pl);border-top-color:var(--purple);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.res-hero{text-align:center;background:var(--purple);border-radius:14px;padding:30px 20px;margin-bottom:18px}
+.res-xp{font-size:46px;font-weight:500;color:#fff;letter-spacing:-.02em}
+.res-lbl{font-size:13px;color:var(--pm);margin-top:4px}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:14px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:13px 9px;text-align:center}
+.sn{font-size:21px;font-weight:600}.sl{font-size:11px;color:var(--muted);margin-top:2px}
+.rrow{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 13px;margin-bottom:7px}
+.clt-note{background:var(--pl);border-radius:8px;padding:13px 15px;margin-bottom:14px}
+.clt-note .nt{font-size:11px;font-weight:600;color:var(--purple);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.clt-note p{font-size:13px;color:var(--pd);line-height:1.6}
+.err-box{background:var(--cl);border:1px solid var(--coral);border-radius:8px;padding:11px 13px;font-size:13px;color:#7A2800;margin-top:10px}
+.divider{height:1px;background:var(--border);margin:14px 0}
+.fade{animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(7px)}to{opacity:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hdr">
+    <div class="logo">💬</div>
+    <div><h1>Speak Up</h1><p>Actividad CLT con corrección por IA</p></div>
+    <div class="xp-chip" id="xp-chip">0 XP</div>
+  </div>
+ 
+  <!-- INTRO -->
+  <div id="s-intro" class="screen on">
+    <div class="intro-title">Practica inglés real</div>
+    <div class="intro-sub">Elige una situación y responde en inglés. La IA revisará tu ortografía, detectará oraciones confusas y te dará sugerencias para mejorar. Los puntos dependen de lo que escribas.</div>
+    <div class="pills-row">
+      <span class="pill pp">CLT</span>
+      <span class="pill pt">CLIL</span>
+      <span class="pill pa">Gamificación + IA</span>
+    </div>
+    <div class="sec-lbl">Elige tu primera situación</div>
+    <div id="sit-list"></div>
+    <button class="btn" id="btn-start" onclick="startActivity()" disabled>Comenzar actividad →</button>
+  </div>
+ 
+  <!-- ACTIVITY -->
+  <div id="s-activity" class="screen">
+    <div class="pbar"><div class="pfill" id="pfill" style="width:0%"></div></div>
+    <div class="rinfo">
+      <span class="rtag" id="rtag">Ronda 1 de 3</span>
+      <span class="xpe" id="xpe">0 / 150 XP</span>
+    </div>
+    <div id="act-main"></div>
+    <div class="rl">Tu respuesta en inglés:</div>
+    <textarea id="resp" placeholder="Write your answer here... focus on communicating clearly, not on being perfect!" oninput="updateWC()"></textarea>
+    <div class="wc" id="wc">0 words</div>
+    <div id="fb-area"></div>
+    <div id="submit-area">
+      <button class="btn" onclick="submitResponse()" style="margin-top:11px">Evaluar con IA ✦</button>
+    </div>
+    <div id="next-area" style="display:none">
+      <button class="btn" id="btn-next" onclick="nextRound()" style="margin-top:11px">Siguiente ronda →</button>
+    </div>
+  </div>
+ 
+  <!-- RESULTS -->
+  <div id="s-results" class="screen">
+    <div class="res-hero">
+      <div style="font-size:34px;margin-bottom:10px">🏆</div>
+      <div class="res-xp" id="final-xp">0 XP</div>
+      <div class="res-lbl" id="final-lbl"></div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="sn">3</div><div class="sl">Rondas</div></div>
+      <div class="stat"><div class="sn" id="res-w">0</div><div class="sl">Palabras</div></div>
+      <div class="stat"><div class="sn" id="res-lv">—</div><div class="sl">Nivel aprox.</div></div>
+    </div>
+    <div id="round-summary"></div>
+    <div class="divider"></div>
+    <div class="clt-note">
+      <div class="nt">Recuerda — CLT en acción</div>
+      <p>Practicaste inglés en situaciones reales con retroalimentación inmediata. El siguiente paso: repite estas respuestas en voz alta con un compañero.</p>
+    </div>
+    <button class="btn" onclick="restart()">Jugar de nuevo</button>
+    <button class="btn btn-o" onclick="restart()" style="margin-top:7px">Cambiar situaciones</button>
+  </div>
+</div>
+ 
+<script>
+const SITS = [
+  { icon:"🏥", bg:"#FAECE7", title:"At the doctor", sub:"Describe síntomas en inglés", tags:["CLT","Speaking"],
+    prompt:"You are at the doctor's office. You have had a headache and fever for 2 days. Describe your symptoms clearly and ask the doctor what you should do.",
+    hints:["Di cuándo empezaron los síntomas","Menciona al menos 2 síntomas","Hazle una pregunta al médico"] },
+  { icon:"🌿", bg:"#E1F5EE", title:"Environmental problem", sub:"CLIL: habla de tu región", tags:["CLT","CLIL"],
+    prompt:"A foreign journalist visits Florencia, Caquetá and interviews you. Describe one environmental problem in your region and suggest one realistic solution.",
+    hints:["Nombra el problema y dónde ocurre","Explica por qué afecta a la gente","Usa 'should', 'could' o 'need to'"] },
+  { icon:"🤝", bg:"#EEEDFE", title:"Convince a friend", sub:"Persuasión en inglés", tags:["CLT","Persuasion"],
+    prompt:"Your friend doesn't want to study for the English exam. Convince them to study with you for at least 30 minutes tonight.",
+    hints:["Da 2 razones para estudiar","Responde a su excusa: 'I'm too tired'","Propón un plan concreto"] },
+  { icon:"🍽️", bg:"#FAEEDA", title:"Ordering at a café", sub:"Interacción cotidiana", tags:["CLT","Daily life"],
+    prompt:"You are at a café. Order food and a drink, and ask about one item on the menu that you don't recognize.",
+    hints:["Empieza con 'Can I have...', 'I'd like...'","Pide al menos 2 cosas","Haz una pregunta sobre el menú"] },
+  { icon:"📰", bg:"#E6F1FB", title:"Explain the news", sub:"CLIL: actualidad en inglés", tags:["CLT","CLIL"],
+    prompt:"You heard a news story this week that surprised you. Explain what happened, why it matters, and give your personal opinion in English.",
+    hints:["Usa tiempo pasado para lo que pasó","Explica por qué es importante","Da tu opinión: 'I think...', 'In my opinion...'"] }
+];
+ 
+let selIdx=null, order=[], round=0, totalXP=0, totalWords=0, scores=[];
+ 
+function renderSits(){
+  document.getElementById('sit-list').innerHTML = SITS.map((s,i)=>`
+    <div class="sc${selIdx===i?' sel':''}" onclick="selSit(${i})">
+      <div class="si" style="background:${s.bg}">${s.icon}</div>
+      <div class="sb"><div class="st">${s.title}</div><div class="ss">${s.sub}</div></div>
+      <div class="chk">${selIdx===i?'✓':''}</div>
+    </div>`).join('');
+}
+ 
+function selSit(i){ selIdx=i; renderSits(); document.getElementById('btn-start').disabled=false; }
+ 
+function startActivity(){
+  const others=SITS.map((_,i)=>i).filter(i=>i!==selIdx).sort(()=>Math.random()-.5).slice(0,2);
+  order=[selIdx,...others]; round=0; totalXP=0; totalWords=0; scores=[];
+  showRound(); show('s-activity');
+}
+ 
+function showRound(){
+  const s=SITS[order[round]];
+  document.getElementById('pfill').style.width=Math.round((round/3)*100)+'%';
+  document.getElementById('rtag').textContent=`Ronda ${round+1} de 3`;
+  document.getElementById('xpe').textContent=totalXP+' / 150 XP';
+  document.getElementById('xp-chip').textContent=totalXP+' XP';
+  document.getElementById('act-main').innerHTML=`
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">${s.tags.map(t=>`<span class="pill pp" style="font-size:10px">${t}</span>`).join(' ')}</div>
+    <div class="sit-hdr"><div class="sh-lbl">Situación — ${s.title}</div><div class="sh-txt">${s.prompt}</div></div>
+    <div class="sit-body">
+      <div class="hl">Pistas para tu respuesta</div>
+      ${s.hints.map(h=>`<div class="hint"><div class="hdot"></div><span>${h}</span></div>`).join('')}
+    </div>`;
+  document.getElementById('resp').value='';
+  document.getElementById('wc').textContent='0 words';
+  document.getElementById('fb-area').innerHTML='';
+  document.getElementById('submit-area').style.display='block';
+  document.getElementById('next-area').style.display='none';
+}
+ 
+function updateWC(){
+  const w=document.getElementById('resp').value.trim().split(/\s+/).filter(w=>w).length;
+  document.getElementById('wc').textContent=w+(w===1?' word':' words');
+}
+ 
+async function submitResponse(){
+  const resp=document.getElementById('resp').value.trim();
+  const words=resp.split(/\s+/).filter(w=>w).length;
+  if(words<3){alert('Escribe al menos unas palabras en inglés.');return;}
+  const s=SITS[order[round]];
+  totalWords+=words;
+  document.getElementById('submit-area').style.display='none';
+  document.getElementById('fb-area').innerHTML=`
+    <div class="loading">
+      <div class="spin"></div>
+      <div style="font-size:13px;color:var(--muted)">La IA está revisando tu respuesta...</div>
+    </div>`;
+  try{
+    const res=await fetch('/api/evaluate',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({situation:s.prompt,response:resp})
+    });
+    if(!res.ok) throw new Error('Error '+res.status);
+    const fb=await res.json();
+    if(fb.error) throw new Error(fb.error);
+    const sc=Math.min(50,Math.max(0,parseInt(fb.score)||0));
+    totalXP+=sc; scores.push({title:s.title,icon:s.icon,score:sc});
+    document.getElementById('xp-chip').textContent=totalXP+' XP';
+    document.getElementById('xpe').textContent=totalXP+' / 150 XP';
+    document.getElementById('pfill').style.width=Math.round(((round+1)/3)*100)+'%';
+ 
+    const spellHTML=fb.spelling_errors?.length
+      ? fb.spelling_errors.map(e=>`<div class="err-row"><div class="err-words"><span class="ew">${e.wrong}</span><span style="color:var(--muted)">→</span><span class="ec">${e.correct}</span></div><div class="et">${e.tip}</div></div>`).join('')
+      : '<span style="color:var(--teal)">✓ Sin errores de ortografía</span>';
+ 
+    const cfHTML=fb.confusing_sentences?.length
+      ? fb.confusing_sentences.map(cf=>`<div class="cf-row"><div style="color:var(--coral);font-size:13px;margin-bottom:4px">"${cf.original}"</div><div style="font-size:12px;color:#7A2800;margin-bottom:5px">⚠ ${cf.problem}</div><div style="font-size:12px;color:var(--teal)">✓ Sugerencia: <em>"${cf.suggestion}"</em></div></div>`).join('')
+      : '';
+ 
+    const gramHTML=fb.grammar_tips?.filter(t=>t).length
+      ? fb.grammar_tips.filter(t=>t).map(t=>`<div style="margin-bottom:6px">• ${t}</div>`).join('')
+      : '';
+ 
+    document.getElementById('fb-area').innerHTML=`
+      <div class="fade" style="margin-top:13px">
+        <div class="fb fb-sc"><div class="fb-title">⭐ Puntaje</div><div class="fb-body"><div class="score-big">${sc} / 50 XP</div><div style="margin-top:7px;font-size:13px">${fb.score_reason||''}</div></div></div>
+        <div class="fb fb-ok"><div class="fb-title">✓ Lo que hiciste bien</div><div class="fb-body">${fb.strengths||'¡Intentaste comunicarte en inglés!'}</div></div>
+        <div class="fb fb-sp"><div class="fb-title">🔤 Errores de ortografía</div><div class="fb-body">${spellHTML}</div></div>
+        ${cfHTML?`<div class="fb fb-sp"><div class="fb-title">⚠️ Oraciones confusas</div><div class="fb-body">${cfHTML}</div></div>`:''}
+        ${gramHTML?`<div class="fb fb-tp"><div class="fb-title">💡 Tips de gramática</div><div class="fb-body">${gramHTML}</div></div>`:''}
+        ${fb.how_to_improve?`<div class="fb fb-tp"><div class="fb-title">📝 Cómo mejorar</div><div class="fb-body">${fb.how_to_improve}</div></div>`:''}
+        ${fb.improved_version?`<div class="fb fb-im"><div class="fb-title">✏️ Versión mejorada</div><div class="fb-body">"${fb.improved_version}"</div></div>`:''}
+      </div>`;
+    document.getElementById('next-area').style.display='block';
+    document.getElementById('btn-next').textContent=round===2?'Ver resultados →':'Siguiente ronda →';
+  }catch(e){
+    document.getElementById('fb-area').innerHTML=`<div class="err-box">⚠️ Error al evaluar: ${e.message}</div>`;
+    document.getElementById('submit-area').style.display='block';
+  }
+}
+ 
+function nextRound(){ round++; if(round>=3){showResults();return;} showRound(); }
+ 
+function showResults(){
+  const fx=scores.reduce((a,r)=>a+r.score,0);
+  document.getElementById('final-xp').textContent=fx+' XP';
+  const pct=fx/150;
+  document.getElementById('final-lbl').textContent=pct>=.9?'¡Comunicador CLT! 🎯':pct>=.7?'Muy buen trabajo 👍':pct>=.5?'Buen comienzo ✨':'Sigue practicando 💪';
+  document.getElementById('res-w').textContent=totalWords;
+  document.getElementById('res-lv').textContent=totalWords>90?'B1+':totalWords>45?'A2+':'A2';
+  document.getElementById('round-summary').innerHTML='<div class="sec-lbl" style="margin-bottom:9px">Resumen por ronda</div>'+
+    scores.map(r=>`<div class="rrow"><span style="font-size:13px">${r.icon} ${r.title}</span><span style="font-size:13px;font-weight:500;color:var(--purple)">${r.score}/50 XP</span></div>`).join('');
+  show('s-results');
+}
+ 
+function restart(){ selIdx=null; round=0; totalXP=0; totalWords=0; scores=[]; document.getElementById('xp-chip').textContent='0 XP'; renderSits(); document.getElementById('btn-start').disabled=true; show('s-intro'); }
+ 
+function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on')); const el=document.getElementById(id); el.classList.add('on','fade'); setTimeout(()=>el.classList.remove('fade'),400); }
+ 
+renderSits();
+</script>
+</body>
+</html>
